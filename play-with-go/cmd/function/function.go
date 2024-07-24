@@ -21,13 +21,19 @@ type Person struct {
 	pos  Position
 }
 
+func whereIsTheGuy(p Person) {
+
+	fmt.Println(p.pos.x)
+	//fmt.Println(p.pos.y)
+	fmt.Println(p.name)
+	fmt.Println(p.age)
+
+}
+
 func main() {
 	p := Position{3, 4}
-
 	buddy := Person{"Buddy", 21, p}
 
-	fmt.Println(buddy.pos)
-	fmt.Println(buddy.pos.x)
-	fmt.Println(buddy.pos.y)
+	whereIsTheGuy(buddy)
 
 }
