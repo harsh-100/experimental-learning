@@ -8,3 +8,9 @@
 - also a button to copy the short URL 
 - QR code have download option in png and jpeg format 
 - can change the size of the QR code or adjust the size of QR code if needed and download that version
+- Project deployed on Fly.io
+
+
+Frontend URL : https://short-link-generate-qr.fly.dev/
+
+Backend URL : https://backend-bitter-shape-3583.fly.dev

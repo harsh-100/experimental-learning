@@ -1,0 +1,38 @@
+<svg xmlns='http://www.w3.org/2000/svg' width='128' height='128' viewBox='0 0 128 128' role='img' aria-label='Link Short QR Maker favicon'>
+  <defs>
+    <linearGradient id='g' x1='0' x2='1' y1='0' y2='1'>
+      <stop offset='0%' stop-color='#7c3aed'/>
+      <stop offset='100%' stop-color='#ec4899'/>
+    </linearGradient>
+  </defs>
+  <!-- rounded square background -->
+  <rect x='4' y='4' width='120' height='120' rx='24' ry='24' fill='url(#g)' />
+
+  <!-- stylized QR dots (white) -->
+  <g fill='#fff'>
+    <!-- top-left finder-like block -->
+    <rect x='14' y='14' width='28' height='28' rx='4' />
+    <rect x='22' y='22' width='12' height='12' />
+
+    <!-- small pattern dots -->
+    <rect x='52' y='26' width='8' height='8' rx='1' />
+    <rect x='66' y='26' width='8' height='8' rx='1' />
+    <rect x='80' y='26' width='8' height='8' rx='1' />
+
+    <rect x='52' y='40' width='8' height='8' rx='1' />
+    <rect x='66' y='40' width='8' height='8' rx='1' />
+
+    <rect x='26' y='66' width='8' height='8' rx='1' />
+    <rect x='40' y='66' width='8' height='8' rx='1' />
+    <rect x='54' y='66' width='8' height='8' rx='1' />
+
+    <!-- bottom-right finder-like block (small) -->
+    <rect x='86' y='86' width='20' height='20' rx='3' />
+  </g>
+
+  <!-- link-chain icon (white with slight opacity) -->
+  <g transform='translate(28,46) scale(0.8)' fill='#ffffff' opacity='0.95'>
+    <path d='M46.6 6.9c-6.5-6.5-17.1-6.5-23.6 0l-6.6 6.6 6.6 6.6 6.6-6.6c3.3-3.3 8.6-3.3 11.9 0 3.3 3.3 3.3 8.6 0 11.9l-9.9 9.9c-3.3 3.3-8.6 3.3-11.9 0l-3.2-3.2-4.7 4.7 3.2 3.2c6.5 6.5 17.1 6.5 23.6 0l9.9-9.9c6.5-6.5 6.5-17.1 0-23.6z' />
+    <path d='M19.3 45.9c6.5 6.5 17.1 6.5 23.6 0l6.6-6.6-6.6-6.6-6.6 6.6c-3.3 3.3-8.6 3.3-11.9 0-3.3-3.3-3.3-8.6 0-11.9l9.9-9.9c3.3-3.3 8.6-3.3 11.9 0l3.2 3.2 4.7-4.7-3.2-3.2c-6.5-6.5-17.1-6.5-23.6 0L16.6 23.1c-6.5 6.5-6.5 17.1 0 22.8z' />
+  </g>
+</svg>
