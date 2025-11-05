@@ -3,6 +3,18 @@ const cors = require('cors');
 const qrcode = require('qrcode');
 const sharp = require('sharp');
 const crypto = require('crypto');
+const path = require('path');
+const fs = require('fs');
+
+// Optional base URL used when deploying frontend + backend together.
+// If set (for example: https://example.com) it will be used to build short URLs
+// and must NOT have a trailing slash.
+const BASE_URL = process.env.BASE_URL || null;
+
+function getBaseUrl(req) {
+  if (BASE_URL) return BASE_URL.replace(/\/$/, '');
+  return `${req.protocol}://${req.get('host')}`;
+}
 
 // Small secure code generator (alphanumeric)
 function generateCode(length = 7) {
@@ -20,14 +32,27 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Health
-app.get('/health', (req, res) => res.json({ status: 'ok' }));
+// Create an API router so all API routes live under /api
+const apiRouter = express.Router();
+
+// Example middleware that runs for all /api/* requests
+apiRouter.use((req, res, next) => {
+  // simple logging + attach a request id
+  const rid = Date.now().toString(36) + Math.random().toString(36).slice(2,6);
+  req.requestId = rid;
+  console.log(`[api:${rid}] ${req.method} ${req.originalUrl}`);
+  // you could add auth, rate-limiting, instrumentation here
+  next();
+});
 
 // Root
 app.get('/', (req, res) => res.send('Link Short + QR Maker backend'));
 
+// Health (under /api)
+apiRouter.get('/health', (req, res) => res.json({ status: 'ok' }));
+
 // Shorten URL: POST /api/shorten { url }
-app.post('/api/shorten', async (req, res) => {
+apiRouter.post('/shorten', async (req, res) => {
   const { url } = req.body || {};
   if (!url) return res.status(400).json({ error: 'url required' });
 
@@ -41,12 +66,8 @@ app.post('/api/shorten', async (req, res) => {
   try {
     // If URL already exists, return existing code
     const existing = await db.getByUrl(url);
-    console.log('existing', existing);
     if (existing) {
-      const shortUrl = `${req.protocol}://${req.get('host')}/${existing.code}`;
-        console.log('shortUrl', shortUrl);
-        console.log('existing.code', existing.code);
-        console.log('existing.original_url', existing.original_url);
+      const shortUrl = `${getBaseUrl(req)}/${existing.code}`;
       return res.json({ shortUrl, code: existing.code, originalUrl: existing.original_url });
     }
 
@@ -60,16 +81,16 @@ app.post('/api/shorten', async (req, res) => {
       tries++;
     } while (tries < 5);
 
-    await db.createLink(code, url);
-    const shortUrl = `${req.protocol}://${req.get('host')}/${code}`;
-    res.json({ shortUrl, code, originalUrl: url });
+  await db.createLink(code, url);
+  const shortUrl = `${getBaseUrl(req)}/${code}`;
+  res.json({ shortUrl, code, originalUrl: url });
   } catch (err) {
     console.error('shorten error', err);
     res.status(500).json({ error: 'internal error' });
   }
 });
 
-// Redirect by code
+// Redirect by code (public short URLs)
 app.get('/:code', async (req, res) => {
   const { code } = req.params;
   try {
@@ -87,7 +108,9 @@ app.get('/:code', async (req, res) => {
 // Generate QR: either pass ?url=... or use code parameter to generate QR for short URL
 // Example: GET /api/qr?url=https://example.com&size=300&format=png
 // Example: GET /api/qr/code/abcd123?size=300&format=jpeg
-app.get('/api/qr', async (req, res) => {
+apiRouter.get('/qr', async (req, res) => {
+
+  console.log("Generating QR code for URL");
   const { url, size = 300, format = 'png' } = req.query;
   if (!url) return res.status(400).json({ error: 'url query param required' });
 
@@ -108,13 +131,13 @@ app.get('/api/qr', async (req, res) => {
   }
 });
 
-app.get('/api/qr/code/:code', async (req, res) => {
+apiRouter.get('/qr/code/:code', async (req, res) => {
   const { code } = req.params;
   const { size = 300, format = 'png' } = req.query;
   try {
     const row = await db.getByCode(code);
     if (!row) return res.status(404).json({ error: 'code not found' });
-    const shortUrl = `${req.protocol}://${req.get('host')}/${code}`;
+    const shortUrl = `${getBaseUrl(req)}/${code}`;
     const sizeInt = parseInt(size, 10) || 300;
     const pngBuffer = await qrcode.toBuffer(shortUrl, { type: 'png', width: sizeInt });
     if (format === 'jpeg' || format === 'jpg') {
@@ -130,5 +153,18 @@ app.get('/api/qr/code/:code', async (req, res) => {
   }
 });
 
+// Mount API router under /api
+app.use('/api', apiRouter);
+
 const PORT = process.env.PORT || 3000;
+// If frontend build exists, serve it (so backend can host both API + frontend on same server)
+const frontendDist = path.join(__dirname, '..', 'frontend', 'dist');
+if (fs.existsSync(frontendDist)) {
+  app.use(express.static(frontendDist));
+  // Serve SPA index.html for unknown routes (after API routes)
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(frontendDist, 'index.html'));
+  });
+}
+
 app.listen(PORT, '0.0.0.0', () => console.log(`Server running on port ${PORT}`));
