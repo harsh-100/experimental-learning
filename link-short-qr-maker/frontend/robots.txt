@@ -1,0 +1,10 @@
+## Robots policy for Link Short + QR Maker
+# All pages on this frontend are scrollable (responsive, vertical scroll supported).
+# This is a human-readable note only and does not change crawler behavior, but
+# indicates the site is designed for full-page vertical scrolling.
+
+User-agent: *
+Allow: /
+Sitemap: /sitemap.xml
+# Crawl-delay: 10
+# If you want to disallow any paths, add Disallow: /path/

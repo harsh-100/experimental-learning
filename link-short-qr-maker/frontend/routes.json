@@ -1,0 +1,45 @@
+[
+  {
+    "path": "/",
+    "title": "Harsh Agarwal — Link Shortener & QR Maker",
+    "description": "Create short links and downloadable QR codes quickly. Built by Harsh Agarwal.",
+    "changefreq": "daily",
+    "priority": 1.0
+  },
+  {
+    "path": "/about",
+    "title": "Features — Link Short + QR Maker",
+    "description": "Features: URL shortening, QR generation, download PNG/JPEG/WebP, size control and more.",
+    "changefreq": "weekly",
+    "priority": 0.8
+  },
+  {
+    "path": "/podcasts",
+    "title": "Podcasts — Harsh Agarwal",
+    "description": "Listen to the latest podcasts from Harsh Agarwal.",
+    "changefreq": "monthly",
+    "priority": 0.6
+  },
+  {
+    "path": "/timeline",
+    "title": "Timeline — Harsh Agarwal",
+    "description": "Companies that Harsh Agarwal has worked with.",
+    "changefreq": "yearly",
+    "priority": 0.7
+  },
+  {
+    "path": "/work",
+    "title": "Work — Harsh Agarwal",
+    "description": "Side projects that have been created by Harsh Agarwal.",
+    "changefreq": "weekly",
+    "priority": 0.5
+  }
+  ,
+  {
+    "path": "/tech",
+    "title": "Technologies — Harsh Agarwal",
+    "description": "Technologies with which Harsh Agarwal has worked with over the years.",
+    "changefreq": "monthly",
+    "priority": 0.5
+  }
+]

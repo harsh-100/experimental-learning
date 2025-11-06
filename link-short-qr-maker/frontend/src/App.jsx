@@ -1,5 +1,7 @@
 import React, { useState } from 'react'
 
+import Seo from './Seo'
+
 const BACKEND = import.meta.env.VITE_API_BASE ?? ''
 
 export default function App() {
@@ -93,6 +95,7 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-gray-50 p-4 sm:p-6">
+      <Seo title="Home" description="Create short links and downloadable QR codes quickly." />
       {/* Follow badge */}
         <div className="fixed left-1/2 bottom-6 z-50 -translate-x-1/2 md:right-4 md:left-auto md:top-4 md:bottom-auto md:translate-x-0 flex flex-col items-center md:items-end gap-3">
           {/* Visit Harshagarwal.dev — subtle slate gradient */}
